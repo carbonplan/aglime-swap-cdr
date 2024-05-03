@@ -1,0 +1,6 @@
+control-script: singlerun.sh
+control-script-dir: /home/tykukla/aglime-swap-cdr/scepter/control-scripts/
+batch-input: test.csv
+batch-input-dir: /home/tykukla/aglime-swap-cdr/scepter/batch-inputs/
+default-dict: default_dictionary  # see SCEPTER/defaults/dict_singlerun.py
+model-dir: /home/tykukla/SCEPTER/

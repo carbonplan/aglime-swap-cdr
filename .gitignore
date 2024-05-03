@@ -131,5 +131,5 @@ dmypy.json
 # mac
 .DS_Store
 
-aglime-swap-cdr/_version.py
-aglime-swap-cdr/cesm2/data/
+_version.py
+cesm2/data/

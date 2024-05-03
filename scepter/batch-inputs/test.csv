@@ -1,0 +1,4 @@
+duration, cec, dustsp, dustrate, dustrad, spinrun, newrun_id, climatedir, climatefiles
+45, 21.1, gbas, 5000, 150, site_311, testrun_01, '/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/', 'default'
+10, 21.1, gbas, 5000, 150, site_311, testrun_02, '/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/', 'default'
+5, 21.1, gbas, 50, 150, site_311, testrun_03, '/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/', 'default'
