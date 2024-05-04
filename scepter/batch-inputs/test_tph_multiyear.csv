@@ -1,0 +1,2 @@
+duration, tph, max_time, cec, dustsp, dustrate, dustrad, spinrun, newrun_id, climatedir, climatefiles, add_secondary
+1, 7.7, 3, 21.1, gbas, 6405, 150, scratch, BB_MultiYearTest, '/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/', 'default', False

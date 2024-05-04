@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-# --------------------------------------- # 
-# define batch input
-batch_base="batch-test-base.yaml"
-# --------------------------------------- # 
+# ----------------------------------------- # 
+# ... define batch input
+# batch_base="batch-test-base.yaml"
+# batch_base="batch-tph-oneiter-base.yaml"
+batch_base="batch-tph-multiyear-base.yaml"
+# ----------------------------------------- # 
 
 
 # --- find number of rows

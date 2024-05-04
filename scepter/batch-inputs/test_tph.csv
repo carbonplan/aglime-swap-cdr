@@ -1,0 +1,2 @@
+duration, tph, cec, dustsp, dustrate, dustrad, spinrun, newrun_id, climatedir, climatefiles
+1, 7.1, 21.1, gbas, 50, 150, scratch, testtargetph3, '/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/', 'default'
