@@ -15,7 +15,7 @@ poro=0.419              # field porosity
 alpha=2.                # [] pH dependence of CEC coefficients (see Appelo, 1994) -- value from Yoshi (pers. comm.)
 
 # spinup name
-spinname=site_411_spintuneup       # name of spinup run
+spinname=site_411       # name of spinup run
 
 # initial guess (name of prior spinup)
 initguess=none          # [none, spinup_run_name] will search output directory for a folder with 
