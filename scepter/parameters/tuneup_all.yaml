@@ -1,6 +1,6 @@
-control-script: spinup_4var_s311.sh
+control-script: spinup_4var_all.sh
 control-script-dir: /home/tykukla/aglime-swap-cdr/scepter/control-scripts/
 model-dir: /home/tykukla/SCEPTER/
 default-dict: default_dictionary  # see SCEPTER/defaults/dict_singlerun.py
-batch-input-dir: NA
-batch-input: NA
+batch-input-dir: /home/tykukla/aglime-swap-cdr/scepter/batch-inputs/
+batch-input: spinup-inputs.csv

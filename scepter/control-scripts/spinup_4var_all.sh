@@ -1,14 +1,14 @@
 #! /usr/bin/bash
 
 # name of run script
-runscript="$1/rock_app_singleRun-szn.py"
+runscript="$1/tunespin_4_newton_inert_buff_v2_defaultdict.py"
+
 # model directory
 modeldir="$1"
 # output directory
 outdir="$modeldir/scepter_output/"
 # default dictionary
 default_dict="$5"  # see SCEPTER/defaults/dict_singlerun.py
-
 
 # --- COLLECT INPUTS ---
 # input csv 
@@ -45,6 +45,12 @@ for ((i=0; i<${#columns[@]}; i++)); do
     params["$column_name"]="$value"
 done
 
+# make sure the row of data isn't empty
+if [ -z "$spinname" ]; then
+    echo "spinname is empty. Exiting script."
+    exit 1
+fi
+
 # build the Python command
 python_cmd="python3 $runscript --modeldir $modeldir --outdir $outdir --default_dict $default_dict"
 for key in "${!params[@]}"; do
@@ -54,5 +60,4 @@ done
 # Run the Python script
 echo "running python script with command:"
 echo "$python_cmd" # troubleshoot
-# eval "$python_cmd"
-
+eval "$python_cmd"
