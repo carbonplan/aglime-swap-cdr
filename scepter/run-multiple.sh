@@ -4,7 +4,8 @@
 # ... define batch input
 # batch_base="batch-tph-oneiter-base.yaml"
 # batch_base="batch-no_app-base.yaml"
-batch_base="batch-tph-liming_noFert-multiyear-base.yaml"
+# batch_base="batch-tph-liming_noFert-multiyear-base.yaml"
+batch_base="batch-liming_fixedRate-base.yaml"
 # ----------------------------------------- # 
 
 
