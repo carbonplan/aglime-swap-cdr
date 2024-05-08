@@ -1,3 +1,3 @@
 duration,cec,dustrate,spinrun,newrun_id,climatedir,climatefiles
-80,21.10329,0,site_311,no_app_site_311_1851-1950mean_x100yr,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens1231-001/1851-1950mean_x100yr,site_311_v0
-80,1.96125,0,site_411,no_app_site_411_1851-1950mean_x100yr,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens1231-001/1851-1950mean_x100yr,site_411_v0
+80,21.10329,0,site_311_v0,no_app_site_311_1851-1950mean_x100yr,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1851-1950mean_x100yr,site_311
+80,1.96125,0,site_411_v0,no_app_site_411_1851-1950mean_x100yr,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1851-1950mean_x100yr,site_411

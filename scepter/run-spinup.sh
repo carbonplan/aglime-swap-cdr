@@ -1,9 +1,34 @@
 #!/usr/bin/env bash
 
-# NOTE: you can either put the CLI command in a bash script (e.g., here) or enter it directly in the terminal.
-# Putting it in a bash script is nice for reproducibility.
-for f in parameters/tuneup*.yaml;
+
+# ----------------------------------------- # 
+# ... define batch input
+batch_base="tuneup_all.yaml"
+# ----------------------------------------- # 
+
+
+# --- find number of rows
+filepath=$(grep 'batch-input-dir:' "parameters/$batch_base" | sed 's/.*: *//')
+filename=$(grep 'batch-input:' "parameters/$batch_base" | sed 's/.*: *//')
+filebase=${filename%.*}
+# check if file exists
+if [ ! -f "$filepath/$filename" ]; then
+    echo "File not found!"
+    exit 1
+fi
+# use wc to count lines
+num_rows=$(wc -l < "$filepath/$filename")
+
+
+# --- loop through rows
+paramfile="parameters/$batch_base"
+for ((i = 1; i <= num_rows; i++)); 
 do
-    echo "Running ${f}"
-    argo submit scepter-workflow.yaml --parameter-file ${f}
+    echo "Running ${i}"
+    argo submit scepter-workflow.yaml --parameter-file $paramfile -p batch-index="${i}"
 done
+
+
+
+
+

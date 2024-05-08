@@ -1,0 +1,3 @@
+duration,tph,max_time,cec,dustsp,dustrate,dustrad,add_secondary,spinrun,newrun_id,climatedir,climatefiles
+2,7.1,70,21.10329,cc,5,150,True,site_311_v0,liming_noFert_hist_tph7p1_site_311_1950-2020,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+2,7.1,70,1.96125,cc,5,150,True,site_411_v0,liming_noFert_hist_tph7p1_site_411_1950-2020,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411

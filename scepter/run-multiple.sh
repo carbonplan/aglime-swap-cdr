@@ -2,9 +2,9 @@
 
 # ----------------------------------------- # 
 # ... define batch input
-# batch_base="batch-test-base.yaml"
 # batch_base="batch-tph-oneiter-base.yaml"
-batch_base="batch-tph-multiyear-base.yaml"
+# batch_base="batch-no_app-base.yaml"
+batch_base="batch-tph-liming_noFert-multiyear-base.yaml"
 # ----------------------------------------- # 
 
 
@@ -20,7 +20,7 @@ fi
 # use wc to count lines
 num_rows=$(wc -l < "$filepath/$filename")
 
-# --- loop through secondary yaml file submissions
+# --- loop through rows in .csv
 paramfile="parameters/$batch_base"
 for ((i = 1; i <= num_rows; i++)); 
 do

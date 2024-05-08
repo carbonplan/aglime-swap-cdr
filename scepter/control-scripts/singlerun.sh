@@ -54,5 +54,5 @@ done
 # Run the Python script
 echo "running python script with command:"
 echo "$python_cmd" # troubleshoot
-# eval "$python_cmd"
+eval "$python_cmd"
 
