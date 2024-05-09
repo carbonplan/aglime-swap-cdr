@@ -27,6 +27,8 @@ for ((i = 1; i <= num_rows; i++));
 do
     echo "Running ${i}"
     argo submit scepter-workflow.yaml --parameter-file $paramfile -p batch-index="${i}"
+    # [TROUBLESHOOT]
+    sleep 1m  # take a break between submitted jobs :)
 done
 
 
