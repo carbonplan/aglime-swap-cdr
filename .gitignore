@@ -134,7 +134,7 @@ dmypy.json
 _version.py
 cesm2/data/
 scratch/
-*/scratch
-*/*/scratch
-*/*/*/scratch
-
+*/scratch/
+*/*/scratch/
+*/*/*/scratch/
+scepter/process/scratch/
