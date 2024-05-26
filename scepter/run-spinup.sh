@@ -3,7 +3,8 @@
 
 # ----------------------------------------- # 
 # ... define batch input
-batch_base="tuneup_all.yaml"
+# batch_base="tuneup_all.yaml"
+batch_base="tuneup_all-TEST-3par.yaml"
 # ----------------------------------------- # 
 
 
