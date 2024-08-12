@@ -11,7 +11,7 @@ default_dict="$5"  # see SCEPTER/defaults/dict_singlerun.py
 
 
 # --- COLLECT INPUTS ---
-# input csv 
+# input csv
 input_dir=$2
 input_name=$3
 input_index=$4
@@ -55,4 +55,3 @@ done
 echo "running python script with command:"
 echo "$python_cmd" # troubleshoot
 eval "$python_cmd"
-

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 
-# ----------------------------------------- # 
+# ----------------------------------------- #
 # ... define batch input
 # batch_base="tuneup_all.yaml"
 batch_base="tuneup_all-TEST-3par.yaml"
-# ----------------------------------------- # 
+# ----------------------------------------- #
 
 
 # --- find number of rows
@@ -23,13 +23,8 @@ num_rows=$(wc -l < "$filepath/$filename")
 
 # --- loop through rows
 paramfile="parameters/$batch_base"
-for ((i = 1; i <= num_rows; i++)); 
+for ((i = 1; i <= num_rows; i++));
 do
     echo "Running ${i}"
     argo submit scepter-workflow.yaml --parameter-file $paramfile -p batch-index="${i}"
 done
-
-
-
-
-

@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 
-import os
-import shutil
 import hashlib
-import time
-import re
 import itertools
-import threading
-import sys
+import os
+import re
+import shutil
 import ssl
+import sys
+import threading
+import time
 import urllib.request
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
 from platform import python_version
+from urllib.error import HTTPError, URLError
 
 ################################################################
 #
@@ -48,67 +47,206 @@ from platform import python_version
 #
 ################################################################
 
-print('Please email feedback to esg-support@earthsystemgrid.org.\n')
+print("Please email feedback to esg-support@earthsystemgrid.org.\n")
 
 data = [
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.185001-185912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.185001-185912.nc','bytes':'14051085','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.186001-186912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.186001-186912.nc','bytes':'14053218','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.187001-187912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.187001-187912.nc','bytes':'14052810','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.188001-188912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.188001-188912.nc','bytes':'14055412','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.189001-189912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.189001-189912.nc','bytes':'14056423','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.190001-190912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.190001-190912.nc','bytes':'14053340','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.191001-191912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.191001-191912.nc','bytes':'14048647','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.192001-192912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.192001-192912.nc','bytes':'14053580','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.193001-193912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.193001-193912.nc','bytes':'14049074','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.194001-194912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.194001-194912.nc','bytes':'14053782','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.195001-195912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.195001-195912.nc','bytes':'14055049','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.196001-196912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.196001-196912.nc','bytes':'14048292','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.197001-197912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.197001-197912.nc','bytes':'14049961','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.198001-198912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.198001-198912.nc','bytes':'14052005','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.199001-199912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.199001-199912.nc','bytes':'14055699','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.200001-200912.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.200001-200912.nc','bytes':'14057631','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201001-201412.nc','filename':'b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201001-201412.nc','bytes':'9062632','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201501-202412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201501-202412.nc','bytes':'14058004','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.202501-203412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.202501-203412.nc','bytes':'14059924','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.203501-204412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.203501-204412.nc','bytes':'14060465','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.204501-205412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.204501-205412.nc','bytes':'14065653','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.205501-206412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.205501-206412.nc','bytes':'14064364','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.206501-207412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.206501-207412.nc','bytes':'14064053','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.207501-208412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.207501-208412.nc','bytes':'14065818','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.208501-209412.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.208501-209412.nc','bytes':'14067181','md5Checksum':''},
-     {'url':'https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.209501-210012.nc','filename':'b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.209501-210012.nc','bytes':'10088000','md5Checksum':''},]
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.185001-185912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.185001-185912.nc",
+        "bytes": "14051085",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.186001-186912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.186001-186912.nc",
+        "bytes": "14053218",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.187001-187912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.187001-187912.nc",
+        "bytes": "14052810",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.188001-188912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.188001-188912.nc",
+        "bytes": "14055412",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.189001-189912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.189001-189912.nc",
+        "bytes": "14056423",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.190001-190912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.190001-190912.nc",
+        "bytes": "14053340",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.191001-191912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.191001-191912.nc",
+        "bytes": "14048647",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.192001-192912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.192001-192912.nc",
+        "bytes": "14053580",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.193001-193912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.193001-193912.nc",
+        "bytes": "14049074",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.194001-194912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.194001-194912.nc",
+        "bytes": "14053782",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.195001-195912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.195001-195912.nc",
+        "bytes": "14055049",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.196001-196912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.196001-196912.nc",
+        "bytes": "14048292",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.197001-197912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.197001-197912.nc",
+        "bytes": "14049961",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.198001-198912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.198001-198912.nc",
+        "bytes": "14052005",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.199001-199912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.199001-199912.nc",
+        "bytes": "14055699",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.200001-200912.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.200001-200912.nc",
+        "bytes": "14057631",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201001-201412.nc",
+        "filename": "b.e21.BHISTcmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201001-201412.nc",
+        "bytes": "9062632",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201501-202412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.201501-202412.nc",
+        "bytes": "14058004",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.202501-203412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.202501-203412.nc",
+        "bytes": "14059924",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.203501-204412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.203501-204412.nc",
+        "bytes": "14060465",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.204501-205412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.204501-205412.nc",
+        "bytes": "14065653",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.205501-206412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.205501-206412.nc",
+        "bytes": "14064364",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.206501-207412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.206501-207412.nc",
+        "bytes": "14064053",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.207501-208412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.207501-208412.nc",
+        "bytes": "14065818",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.208501-209412.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.208501-209412.nc",
+        "bytes": "14067181",
+        "md5Checksum": "",
+    },
+    {
+        "url": "https://tds.ucar.edu/thredds/fileServer/datazone/campaign/cgd/cesm/CESM2-LE/lnd/proc/tseries/month_1/QRUNOFF/b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.209501-210012.nc",
+        "filename": "b.e21.BSSP370cmip6.f09_g17.LE2-1231.001.clm2.h0.QRUNOFF.209501-210012.nc",
+        "bytes": "10088000",
+        "md5Checksum": "",
+    },
+]
+
 
 def main(data):
-
     args = processArguments()
 
     for d in data:
         executeDownload(Download(args, d))
 
+
 def processArguments():
-
     args = {}
-    args.update({'apiToken': 'cCWiv1YLhFQ7dk5OaoVxSKaE4Byzobnvb5DtqS9L'})
-    args.update({'userAgent': 'python/{}/gateway/{}'.format(python_version(), '4.4.6-20240402-174931')})
-    args.update({'attemptMax': 10})
-    args.update({'initialSleepSeconds': 10})
-    args.update({'sleepMultiplier': 3})
-    args.update({'sleepMaxSeconds': 900})
-    args.update({'insecure': False})
+    args.update({"apiToken": "cCWiv1YLhFQ7dk5OaoVxSKaE4Byzobnvb5DtqS9L"})
+    args.update(
+        {
+            "userAgent": "python/{}/gateway/{}".format(
+                python_version(), "4.4.6-20240402-174931"
+            )
+        }
+    )
+    args.update({"attemptMax": 10})
+    args.update({"initialSleepSeconds": 10})
+    args.update({"sleepMultiplier": 3})
+    args.update({"sleepMaxSeconds": 900})
+    args.update({"insecure": False})
 
-    if '-k' in sys.argv or '--insecure' in sys.argv:
-        args.update({'insecure': True})
+    if "-k" in sys.argv or "--insecure" in sys.argv:
+        args.update({"insecure": True})
 
-    if '-h' in sys.argv or '--help' in sys.argv:
-        print('Usage: {} [options...]'.format(sys.argv[0]))
-        print(' -h, --help        Show usage')
-        print(' -k, --insecure    Allow insecure server connections (no certificate check) when using SSL')
+    if "-h" in sys.argv or "--help" in sys.argv:
+        print("Usage: {} [options...]".format(sys.argv[0]))
+        print(" -h, --help        Show usage")
+        print(
+            " -k, --insecure    Allow insecure server connections (no certificate check) when using SSL"
+        )
         exit(0)
 
     return args
 
-def executeDownload(download):
 
+def executeDownload(download):
     if not os.path.isfile(download.filename):
         attemptAndValidateDownload(download)
         moveDownload(download)
@@ -118,36 +256,44 @@ def executeDownload(download):
 
     reportDownload(download)
 
-def moveDownload(download):
 
+def moveDownload(download):
     if download.success and (download.valid or download.vwarning):
         os.rename(download.filenamePart, download.filename)
 
-def reportDownload(download):
 
+def reportDownload(download):
     if download.success and download.valid:
-        print('{} download successful'.format(download.filename))
+        print("{} download successful".format(download.filename))
 
     if download.success and not download.valid and download.vwarning:
-        print('{} download validation warning: {}'.format(download.filename, download.vwarning))
+        print(
+            "{} download validation warning: {}".format(
+                download.filename, download.vwarning
+            )
+        )
 
     if download.success and not download.valid and download.verror:
-        print('{} download validation error: {}'.format(download.filename, download.verror))
+        print(
+            "{} download validation error: {}".format(
+                download.filename, download.verror
+            )
+        )
 
     if not download.success and download.error:
-        print('{} download failed: {}'.format(download.filename, download.error))
+        print("{} download failed: {}".format(download.filename, download.error))
+
 
 def attemptAndValidateDownload(download):
-
     while download.attempt:
         downloadFile(download)
 
     if download.success:
         validateFile(download)
 
-def downloadFile(download):
 
-    try :
+def downloadFile(download):
+    try:
         startOrResumeDownload(download)
     except HTTPError as error:
         handleHTTPErrorAttempt(download, error)
@@ -160,14 +306,15 @@ def downloadFile(download):
     else:
         handleSuccessfulAttempt(download)
 
-def startOrResumeDownload(download):
 
-    startAnimateDownload('{} downloading:'.format(download.filename))
+def startOrResumeDownload(download):
+    startAnimateDownload("{} downloading:".format(download.filename))
 
     if os.path.isfile(download.filenamePart):
         resumeDownloadFile(download)
     else:
         startDownloadFile(download)
+
 
 def startAnimateDownload(message):
     global animateMessage
@@ -181,6 +328,7 @@ def startAnimateDownload(message):
     t = threading.Thread(daemon=True, target=animateDownload)
     t.start()
 
+
 def stopAnimateDownload(outcome):
     global animateOutcome
     global animateOn
@@ -191,45 +339,45 @@ def stopAnimateDownload(outcome):
     # wait for animation child process to stop before any parent print
     time.sleep(0.3)
 
+
 def animateDownload():
     global animateMessage
     global animateOutcome
     global animateOn
 
-    for d in itertools.cycle(['.  ', '.. ', '...', '   ']):
-
+    for d in itertools.cycle([".  ", ".. ", "...", "   "]):
         if not animateOn:
-            print('\r{} {}'.format(animateMessage, animateOutcome), flush=True)
+            print("\r{} {}".format(animateMessage, animateOutcome), flush=True)
             break
 
-        print('\r{} {}'.format(animateMessage, d), end='', flush=True)
+        print("\r{} {}".format(animateMessage, d), end="", flush=True)
         time.sleep(0.2)
 
-def resumeDownloadFile(download):
 
+def resumeDownloadFile(download):
     request = createRequest(download, createResumeHeaders(download))
     readFile(download, request)
 
-def startDownloadFile(download):
 
+def startDownloadFile(download):
     request = createRequest(download, createStartHeaders(download))
     readFile(download, request)
 
-def createResumeHeaders(download):
 
+def createResumeHeaders(download):
     headers = createStartHeaders(download)
     headers.update(createRangeHeader(download))
 
     return headers
 
-def createRequest(download, headers):
 
+def createRequest(download, headers):
     request = urllib.request.Request(download.url, headers=headers)
 
     return request
 
-def createStartHeaders(download):
 
+def createStartHeaders(download):
     headers = {}
     headers.update(createUserAgentHeader(download))
 
@@ -238,31 +386,34 @@ def createStartHeaders(download):
 
     return headers
 
-def createUserAgentHeader(download):
 
-    return {'User-agent': download.userAgent}
+def createUserAgentHeader(download):
+    return {"User-agent": download.userAgent}
+
 
 def createAuthorizationHeader(download):
+    return {"Authorization": "api-token {}".format(download.apiToken)}
 
-    return {'Authorization': 'api-token {}'.format(download.apiToken)}
 
 def createRangeHeader(download):
-
     start = os.path.getsize(download.filenamePart)
-    header = {'Range': 'bytes={}-'.format(start)}
+    header = {"Range": "bytes={}-".format(start)}
 
     return header
 
-def readFile(download, request):
 
+def readFile(download, request):
     context = createSSLContext(download)
 
-    with urllib.request.urlopen(request, context=context) as response, open(download.filenamePart, 'ab') as fh:
+    with (
+        urllib.request.urlopen(request, context=context) as response,
+        open(download.filenamePart, "ab") as fh,
+    ):
         collectResponseHeaders(download, response)
         shutil.copyfileobj(response, fh)
 
-def createSSLContext(download):
 
+def createSSLContext(download):
     # See:
     #      https://docs.python.org/3/library/urllib.request.html
     #      https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
@@ -277,15 +428,15 @@ def createSSLContext(download):
 
     return None
 
-def collectResponseHeaders(download, response):
 
+def collectResponseHeaders(download, response):
     download.responseHeaders = response.info()
-    if download.responseHeaders.get('ETag'):
-        download.etag = download.responseHeaders.get('ETag').strip('"')
+    if download.responseHeaders.get("ETag"):
+        download.etag = download.responseHeaders.get("ETag").strip('"')
+
 
 def handleHTTPErrorAttempt(download, httpError):
-
-    if httpError.code == 416: # 416 is Range Not Satisfiable
+    if httpError.code == 416:  # 416 is Range Not Satisfiable
         # likely the file completely downloaded and validation was interrupted,
         # therefore calling it successfully downloaded and allowing validation
         # to say otherwise
@@ -293,11 +444,15 @@ def handleHTTPErrorAttempt(download, httpError):
     else:
         handleRecoverableAttempt(download, httpError)
 
+
 def handleRecoverableAttempt(download, error):
+    stopAnimateDownload("error")
 
-    stopAnimateDownload('error')
-
-    print('failure on attempt {} downloading {}: {}'.format(download.attemptNumber, download.filename, error))
+    print(
+        "failure on attempt {} downloading {}: {}".format(
+            download.attemptNumber, download.filename, error
+        )
+    )
 
     if download.attemptNumber < download.attemptMax:
         sleepBeforeNextAttempt(download)
@@ -306,32 +461,38 @@ def handleRecoverableAttempt(download, error):
         download.attempt = False
         download.error = error
 
-def sleepBeforeNextAttempt(download):
 
-    sleepSeconds = download.initialSleepSeconds * (download.sleepMultiplier ** (download.attemptNumber - 1))
+def sleepBeforeNextAttempt(download):
+    sleepSeconds = download.initialSleepSeconds * (
+        download.sleepMultiplier ** (download.attemptNumber - 1)
+    )
 
     if sleepSeconds > download.sleepMaxSeconds:
         sleepSeconds = download.sleepMaxSeconds
 
-    print('waiting {} seconds before next attempt to download {}'.format(sleepSeconds, download.filename))
+    print(
+        "waiting {} seconds before next attempt to download {}".format(
+            sleepSeconds, download.filename
+        )
+    )
     time.sleep(sleepSeconds)
 
-def handleIrrecoverableAttempt(download, error):
 
-    stopAnimateDownload('error')
+def handleIrrecoverableAttempt(download, error):
+    stopAnimateDownload("error")
 
     download.attempt = False
     download.error = error
 
-def handleSuccessfulAttempt(download):
 
-    stopAnimateDownload('done')
+def handleSuccessfulAttempt(download):
+    stopAnimateDownload("done")
 
     download.attempt = False
     download.success = True
 
-def validateFile(download):
 
+def validateFile(download):
     try:
         validateAllSteps(download)
     except InvalidDownload as error:
@@ -343,8 +504,8 @@ def validateFile(download):
     else:
         download.valid = True
 
-def validateAllSteps(download):
 
+def validateAllSteps(download):
     verrorData = validatePerData(download)
     verrorEtag = validatePerEtag(download)
     verrorStale = validateStaleness(download)
@@ -355,8 +516,8 @@ def validateAllSteps(download):
     if verrorStale:
         raise verrorStale
 
-def validatePerData(download):
 
+def validatePerData(download):
     try:
         validateBytes(download)
         validateChecksum(download)
@@ -365,14 +526,14 @@ def validatePerData(download):
     else:
         return None
 
-def validateBytes(download):
 
+def validateBytes(download):
     size = os.path.getsize(download.filenamePart)
     if not download.bytes == size:
         raise InvalidSizeValue(download, size)
 
-def validateChecksum(download):
 
+def validateChecksum(download):
     if download.md5Checksum:
         md5Checksum = readMd5Checksum(download)
         if not download.md5Checksum == md5Checksum:
@@ -380,18 +541,18 @@ def validateChecksum(download):
     else:
         raise UnableToPerformChecksum(download)
 
-def readMd5Checksum(download):
 
+def readMd5Checksum(download):
     hash_md5 = hashlib.md5()
 
-    with open(download.filenamePart, 'rb') as f:
-        for chunk in iter(lambda: f.read(4096), b''):
+    with open(download.filenamePart, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
 
     return hash_md5.hexdigest()
 
-def validatePerEtag(download):
 
+def validatePerEtag(download):
     try:
         validateChecksumEtag(download)
     except InvalidDownload as error:
@@ -399,8 +560,8 @@ def validatePerEtag(download):
     else:
         return None
 
-def validateChecksumEtag(download):
 
+def validateChecksumEtag(download):
     if isEtagChecksum(download):
         md5Checksum = readMd5Checksum(download)
         if not download.etag == md5Checksum:
@@ -408,12 +569,12 @@ def validateChecksumEtag(download):
     else:
         raise UnableToPerformChecksum(download)
 
-def isEtagChecksum(download):
 
-    return download.etag and re.fullmatch(r'[a-z0-9]+', download.etag)
+def isEtagChecksum(download):
+    return download.etag and re.fullmatch(r"[a-z0-9]+", download.etag)
+
 
 def validateStaleness(download):
-
     try:
         validateStaleChecksum(download)
     except InvalidDownload as error:
@@ -421,59 +582,70 @@ def validateStaleness(download):
     else:
         return None
 
-def validateStaleChecksum(download):
 
+def validateStaleChecksum(download):
     if isEtagChecksum(download):
         if not download.md5Checksum or download.md5Checksum != download.etag:
             raise StaleChecksumValue(download)
 
-class InvalidDownload(Exception):
 
+class InvalidDownload(Exception):
     pass
 
-class InvalidSizeValue(InvalidDownload):
 
+class InvalidSizeValue(InvalidDownload):
     def __init__(self, download, actual):
-        super().__init__('invalid byte size: downloaded file is {} bytes but should be {}'.format(actual, download.bytes))
+        super().__init__(
+            "invalid byte size: downloaded file is {} bytes but should be {}".format(
+                actual, download.bytes
+            )
+        )
+
 
 class InvalidChecksumValue(InvalidDownload):
-
     def __init__(self, download, actual):
-        super().__init__('invalid checksum: downloaded file is {} but should be {}'.format(actual, download.md5Checksum))
+        super().__init__(
+            "invalid checksum: downloaded file is {} but should be {}".format(
+                actual, download.md5Checksum
+            )
+        )
+
 
 class InvalidChecksumValuePerEtag(InvalidDownload):
-
     def __init__(self, download, actual):
-        super().__init__('invalid checksum: downloaded file is {} but should be {} according to server'.format(actual, download.etag))
+        super().__init__(
+            "invalid checksum: downloaded file is {} but should be {} according to server".format(
+                actual, download.etag
+            )
+        )
+
 
 class UnableToPerformChecksum(InvalidDownload):
-
     def __init__(self, download):
-        super().__init__('cannot verify checksum')
+        super().__init__("cannot verify checksum")
+
 
 class StaleChecksumValue(InvalidDownload):
-
     def __init__(self, download):
-        super().__init__('checksum value has changed')
+        super().__init__("checksum value has changed")
 
-class Download():
 
+class Download:
     def __init__(self, args, datum):
+        self.apiToken = args.get("apiToken")
+        self.userAgent = args.get("userAgent")
+        self.attemptMax = args.get("attemptMax")
+        self.initialSleepSeconds = args.get("initialSleepSeconds")
+        self.sleepMultiplier = args.get("sleepMultiplier")
+        self.sleepMaxSeconds = args.get("sleepMaxSeconds")
+        self.insecure = args.get("insecure")
 
-        self.apiToken = args.get('apiToken')
-        self.userAgent = args.get('userAgent')
-        self.attemptMax = args.get('attemptMax')
-        self.initialSleepSeconds = args.get('initialSleepSeconds')
-        self.sleepMultiplier = args.get('sleepMultiplier')
-        self.sleepMaxSeconds = args.get('sleepMaxSeconds')
-        self.insecure = args.get('insecure')
+        self.url = datum.get("url")
+        self.filename = datum.get("filename")
+        self.bytes = int(datum.get("bytes"))
+        self.md5Checksum = datum.get("md5Checksum")
 
-        self.url = datum.get('url')
-        self.filename = datum.get('filename')
-        self.bytes = int(datum.get('bytes'))
-        self.md5Checksum = datum.get('md5Checksum')
-
-        self.filenamePart = self.filename + '.part'
+        self.filenamePart = self.filename + ".part"
         self.success = False
         self.attempt = True
         self.attemptNumber = 1
@@ -485,7 +657,8 @@ class Download():
         self.verror = None
 
     def __str__(self):
-        return f'url: {self.url}, filename: {self.filename}, bytes: {self.bytes}, md5Checksum: {self.md5Checksum}'
+        return f"url: {self.url}, filename: {self.filename}, bytes: {self.bytes}, md5Checksum: {self.md5Checksum}"
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main(data)

@@ -36,14 +36,14 @@ for subdir in "$src"/*; do
         TIME_DIFF=$((NOW - LAST_UPDATE))
         # convert time difference to days
         TIME_DIFF_DAYS=$((TIME_DIFF / 86400)) # 86400 seconds in a day
-        
+
         # check if the directory hasn't been updated in toonew days
         if [ $TIME_DIFF_DAYS -le $toonew ]; then
             # update exclusion list
             # exc_list+="$subdir "
             exc_list+=" --exclude $subdir"
             # echo "Syncing $subdir"
-            
+
         fi
     fi
 done
@@ -56,4 +56,3 @@ s5cmd mv $exc_list $src $dst
 
 # --- delete dirs that are now empty
 find $src -mindepth 1 -type d -empty -not -path "$MAIN_DIR" -delete
-
