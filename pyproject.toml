@@ -50,6 +50,7 @@ target-version = "py39"
 exclude = [
     "docs",
     "scepter/batch-inputs/*.csv",
+    "scepter/process/scratch",
     "*.csv",
     "**/*.csv",
     ".eggs"]
