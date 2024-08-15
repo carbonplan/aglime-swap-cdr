@@ -36,8 +36,9 @@ exclude = ["docs", "tests", "tests.*", "docs.*"]
 datatree = ["py.typed"]
 
 [tool.mypy]
-files = "**/*.py"
 show_error_codes = true
+files = "cesm2/*"
+
 
 
 [tool.ruff]
