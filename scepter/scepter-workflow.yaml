@@ -4,6 +4,7 @@ metadata:
   generateName: scepter-run- # use name: specter-spinup to have the same pod name for all runs rather than a unique name
   namespace: dev  # replace with your deployment namespace if needed
   labels:
+    workflows.argoproj.io/creator-preferred-username: 'tykukla'
     jupyterflow-override: 'true' # this sets the workflow to have access to the shared file system and conda environments
 spec:
   entrypoint: scepter-run # sets which template the workflow starts on
@@ -27,6 +28,8 @@ spec:
       value: cdr-scepter1p0_env
   templates:
   - name: scepter-run
+    nodeSelector:
+      dedicated: workflow
     inputs:
       parameters: # specifies which parameters are used by this template
       - name: batch-input-dir
@@ -45,5 +48,5 @@ spec:
       source: |
         conda run -n {{inputs.parameters.conda-env}} --cwd {{inputs.parameters.control-script-dir}} bash {{inputs.parameters.control-script}} {{inputs.parameters.model-dir}} {{inputs.parameters.batch-input-dir}} {{inputs.parameters.batch-input}} {{inputs.parameters.batch-index}} {{inputs.parameters.default-dict}}
   ttlStrategy:
-    secondsAfterSuccess: 120 # "time-to-live: i.e., how long before the workflow gets deleted. Note the logs are still archived by Loki and viewable after deletion."
-    secondsAfterFailure: 120
+    secondsAfterSuccess: 600    # "time-to-live: i.e., how long before the workflow gets deleted. Note the logs are still archived by Loki and viewable after deletion."
+    secondsAfterFailure: 600

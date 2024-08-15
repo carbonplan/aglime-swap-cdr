@@ -1,0 +1,2 @@
+site,spinname,lat,lon,mat,soilmoisture,qrun,tsom,erosion,nitrif,tph,cec,tec,poro,alpha,spinup_parentrock_file,tunespin_timeout,ca,iter_max
+site_411,site_411_pr8,32.0,-83,18.52789,0.231552,0.2434256,2.276667,0.00084,0.831883,5.200242,1.96125,46.91557,0.419,2.0,parentlist8.json,260000,0.00005,450

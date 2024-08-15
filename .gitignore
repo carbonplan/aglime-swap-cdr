@@ -137,5 +137,7 @@ scratch/
 */scratch/
 */*/scratch/
 */*/*/scratch/
-scepter/process/scratch/
-scepter/tmp.txt/
+scepter/process/scratch
+scepter/process/scratch/*
+scepter/process/runs/figures
+scepter/tmp.txt

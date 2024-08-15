@@ -1,0 +1,17 @@
+duration,cec,dustsp,dustrate,dustrad,add_secondary,spinrun,newrun_id,climatedir,climatefiles
+70,21.10329,gbas,600.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-6p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,600.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-6p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,700.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-7p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,700.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-7p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,800.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-8p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,800.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-8p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,900.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-9p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,900.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-9p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,1000.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-10p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,1000.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-10p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,1400.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-14p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,1400.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-14p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,1800.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-18p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,1800.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-18p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411
+70,21.10329,gbas,2200.0,150,True,site_311,basalt_noFert_hist_fixedRate_site_311_1950-2020_app-22p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_311
+70,1.96125,gbas,2200.0,150,True,site_411,basalt_noFert_hist_fixedRate_site_411_1950-2020_app-22p0,/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/cesm2le_monthly_ens-1231-001/1950-2020,site_411

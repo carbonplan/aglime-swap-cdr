@@ -1,0 +1,12 @@
+duration,singlerun_seasonality,cec,dustsp,dustsp_2nd,dustrate,dustrate_2nd,dustrad,add_secondary,spinrun,imix,newrun_id,climatedir,climatefiles
+50,False,21.10329,gbas,amnt,0.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_0p0,NA,site_311
+50,False,21.10329,gbas,amnt,20.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_0p2,NA,site_311
+50,False,21.10329,gbas,amnt,40.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_0p4,NA,site_311
+50,False,21.10329,gbas,amnt,60.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_0p6,NA,site_311
+50,False,21.10329,gbas,amnt,80.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_0p8,NA,site_311
+50,False,21.10329,gbas,amnt,100.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_1p0,NA,site_311
+50,False,21.10329,gbas,amnt,200.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_2p0,NA,site_311
+50,False,21.10329,gbas,amnt,300.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_3p0,NA,site_311
+50,False,21.10329,gbas,amnt,700.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_10p0,NA,site_311
+50,False,21.10329,gbas,amnt,1200.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_20p0,NA,site_311
+50,False,21.10329,gbas,amnt,2000.0,15.0,150,False,spinup_1_spintuneupManual,1,midfert_gbas_30p0,NA,site_311
