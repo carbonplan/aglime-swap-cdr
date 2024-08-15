@@ -51,7 +51,7 @@ for subdir in "$src"/*; do
                 break
             fi
         done
-        
+
 
         # check if the directory hasn't been updated in toonew days
         if [ $TIME_DIFF_DAYS -lt $toonew ] || [ "$should_exclude" = true ]; then
