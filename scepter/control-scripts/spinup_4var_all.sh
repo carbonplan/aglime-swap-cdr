@@ -11,7 +11,7 @@ outdir="$modeldir/scepter_output/"
 default_dict="$5"  # see SCEPTER/defaults/dict_singlerun.py
 
 # --- COLLECT INPUTS ---
-# input csv 
+# input csv
 input_dir=$2
 input_name=$3
 input_index=$4

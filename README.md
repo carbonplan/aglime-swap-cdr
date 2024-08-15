@@ -1,6 +1,6 @@
 ## status
 
-This repository is still under development and the code may not work as intended. Please [send us an email](mailto:hello@carbonplan.org) if you have any questions. 
+This repository is still under development and the code may not work as intended. Please [send us an email](mailto:hello@carbonplan.org) if you have any questions.
 
 ## about us
 
