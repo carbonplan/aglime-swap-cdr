@@ -1,0 +1,12 @@
+duration,singlerun_seasonality,cec,dustsp,dustrate,dustrad,add_secondary,spinrun,imix,newrun_id,climatedir,climatefiles
+70,False,21.10329,gbas,0.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_0p0,NA,site_311
+70,False,21.10329,gbas,20.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_0p2,NA,site_311
+70,False,21.10329,gbas,40.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_0p4,NA,site_311
+70,False,21.10329,gbas,60.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_0p6,NA,site_311
+70,False,21.10329,gbas,80.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_0p8,NA,site_311
+70,False,21.10329,gbas,100.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_1p0,NA,site_311
+70,False,21.10329,gbas,200.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_2p0,NA,site_311
+70,False,21.10329,gbas,300.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_3p0,NA,site_311
+70,False,21.10329,gbas,1000.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_10p0,NA,site_311
+70,False,21.10329,gbas,2000.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_20p0,NA,site_311
+70,False,21.10329,gbas,3000.0,150,False,spinup_1_spintuneupManual,1,run1_gbas_30p0,NA,site_311

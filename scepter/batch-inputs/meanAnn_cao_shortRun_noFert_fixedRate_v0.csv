@@ -1,0 +1,9 @@
+duration,singlerun_seasonality,cec,dustsp,dustrate,dustrad,add_secondary,spinrun,newrun_id,climatedir
+70,False,21.10329,cao,0,150,True,site_311_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_311_app-0,NA
+70,False,1.96125,cao,0,150,True,site_411_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_411_app-0,NA
+70,False,21.10329,cao,100,150,True,site_311_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_311_app-1,NA
+70,False,1.96125,cao,100,150,True,site_411_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_411_app-1,NA
+70,False,21.10329,cao,1000,150,True,site_311_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_311_app-10,NA
+70,False,1.96125,cao,1000,150,True,site_411_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_411_app-10,NA
+70,False,21.10329,cao,2000,150,True,site_311_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_311_app-20,NA
+70,False,1.96125,cao,2000,150,True,site_411_spintuneup,meanAnn_cao_shortRun_noFert_fixedRate_site_411_app-20,NA

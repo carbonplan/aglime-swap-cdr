@@ -1,0 +1,12 @@
+duration,singlerun_seasonality,cec,dustsp,dustrate,dustrad,add_secondary,spinrun,imix,newrun_id,climatedir,climatefiles
+70,False,21.10329,cc,0.0,150,False,spinup_0_spintuneupManual,1,run0_0p0,NA,site_311
+70,False,21.10329,cc,20.0,150,False,spinup_0_spintuneupManual,1,run0_0p2,NA,site_311
+70,False,21.10329,cc,40.0,150,False,spinup_0_spintuneupManual,1,run0_0p4,NA,site_311
+70,False,21.10329,cc,60.0,150,False,spinup_0_spintuneupManual,1,run0_0p6,NA,site_311
+70,False,21.10329,cc,80.0,150,False,spinup_0_spintuneupManual,1,run0_0p8,NA,site_311
+70,False,21.10329,cc,100.0,150,False,spinup_0_spintuneupManual,1,run0_1p0,NA,site_311
+70,False,21.10329,cc,200.0,150,False,spinup_0_spintuneupManual,1,run0_2p0,NA,site_311
+70,False,21.10329,cc,300.0,150,False,spinup_0_spintuneupManual,1,run0_3p0,NA,site_311
+70,False,21.10329,cc,1000.0,150,False,spinup_0_spintuneupManual,1,run0_10p0,NA,site_311
+70,False,21.10329,cc,2000.0,150,False,spinup_0_spintuneupManual,1,run0_20p0,NA,site_311
+70,False,21.10329,cc,3000.0,150,False,spinup_0_spintuneupManual,1,run0_30p0,NA,site_311
