@@ -37,7 +37,7 @@ datatree = ["py.typed"]
 
 [tool.mypy]
 show_error_codes = true
-files = "cesm2/*"
+files = "scepter/*"
 
 
 
