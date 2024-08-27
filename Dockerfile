@@ -2,14 +2,14 @@
 FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
 
 
-# FROM pangeo/pangeo-notebook:latest 
+# FROM pangeo/pangeo-notebook:latest
 
 # USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-#     curl \ 
-    wget \ 
-#     htop 
+#     curl \
+    wget \
+#     htop
 
 # ENV JAVA_HOME=/usr/bin/java
 # ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java
