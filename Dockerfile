@@ -23,12 +23,24 @@ RUN wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.15.5.tar.gz
     && cd petsc-3.15.5 \
     && ./configure --with-cc=gcc --with-cxx=g++ --with-fc=gfortran --download-fblaslapack --with-mpi=0 --with-debugging=0 --with-shared-libraries=0 --with-x=0 PETSC_ARCH=linux-gnu-opt \
     && make PETSC_DIR=/opt/petsc-3.15.5 PETSC_ARCH=linux-gnu-opt all \
-    && rm /opt/petsc-3.15.5.tar.gz
+    && rm /opt/petsc-3.15.5.tar.gz \
+    && make PETSC_DIR=/opt/petsc-3.15.5 PETSC_ARCH=linux-gnu-opt check
 
+# Clone and build CrunchFlow
 WORKDIR /opt
 RUN git clone https://github.com/CISteefel/CrunchTope.git \
-    && mv crunchtope-dev/source crunch \
-    && cd crunch \
+    && cd CrunchTope \
     && make
 
-WORKDIR /
+# Add CrunchFlow to PATH
+ENV PATH=$PATH:/opt/CrunchTope
+
+# Clean up
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Set working directory
+WORKDIR /home/jovyan/work
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER jovyan
