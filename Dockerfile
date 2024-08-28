@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PETSC_DIR=/opt/petsc-3.15.5
 ENV PETSC_ARCH=linux-gnu-opt
-ENV PATH=$PATH:/opt/crunch/source
 
 WORKDIR /opt
 RUN wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.15.5.tar.gz \
@@ -28,13 +27,16 @@ RUN wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.15.5.tar.gz
 # Clone and build CrunchFlow
 WORKDIR /opt
 RUN git clone https://bitbucket.org/crunchflow/crunchtope-dev.git \
+    && cd crunchtope-dev \
     && mkdir -p /opt/crunch \
-    && mv crunchtope-dev/source /opt/crunch/ \
-    && cd /opt/crunch/source \
-    && make
+    && mv source /opt/crunch/
 
 # Add CrunchFlow to PATH
 ENV PATH=$PATH:/opt/crunch/source
+
+# Build CrunchFlow
+WORKDIR /opt/crunch/source
+RUN make
 
 # Clean up
 RUN apt-get clean && \
