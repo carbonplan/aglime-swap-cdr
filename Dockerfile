@@ -2,40 +2,39 @@
 FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
 
 
-# FROM pangeo/pangeo-notebook:latest
-
-# USER root
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
-#     curl \
     wget \
-#     htop
-
-# ENV JAVA_HOME=/usr/bin/java
-# ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java
-# ENV=/usr/lib/jvm/java-17-openjdk-amd64
-
-# ENV PYSPARK_PYTHON=/srv/conda/envs/notebook/bin/python
-# ENV SPARK_HOME=${SPARK_HOME:-"/opt/spark"}
-# RUN mkdir -p ${SPARK_HOME}
-# WORKDIR ${SPARK_HOME}
+    gfortran \
+    gcc \
+    g++ \
+    python3 \
+    python3-pip \
+    git \
+    make \
+    xz-utils \
 
 
-
-# USER root
-
-# RUN curl https://dlcdn.apache.org/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz --output spark-3.5.1-bin-hadoop3.tgz \
-# && tar xvzf spark-3.5.1-bin-hadoop3.tgz --strip-components 1  \
-# && rm -rf spark-3.5.1-bin-hadoop3.tgz
+SHELL ["/bin/bash", "-c"]
 
 
+# Install PETSc
+ENV PETSC_VERSION=3.15.5
+ENV PETSC_DIR=/opt/petsc-${PETSC_VERSION}
+ENV PETSC_ARCH=linux-gnu-opt
 
-# ENV PYSPARK_DRIVER_PYTHON=/srv/conda/envs/notebook/lib/python3.11/site-packages/pyspark
+RUN mkdir -p /opt/crunch \
+    && cd /opt/crunch \
+    && wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz \
+    && tar -xzf petsc-${PETSC_VERSION}.tar.gz \
+    && cd petsc-${PETSC_VERSION} \
+    && ./configure --with-cc=gcc --with-cxx=g++ --with-fc=gfortran --download-fblaslapack --with-mpi=0 --with-debugging=0 --with-shared-libraries=0 --with-x=0 PETSC_ARCH=${PETSC_ARCH} \
+    && make PETSC_DIR=${PETSC_DIR} PETSC_ARCH=${PETSC_ARCH} all
 
+# Clone and build CrunchFlow
+RUN cd /opt/crunch \
+    && git clone https://bitbucket.org/crunchflow/crunchtope-dev.git \
+    && cd crunchtope-dev/source \
+    && make
 
-
-# build locally for m1
-# docker build -t pyspark_test . --platform linux/arm64 --no-cache
-
-# startup new container: docker run -it --name pyspark5 pyspark_test:latest /bin/bash
-# docker stop < name> : ex > docker stop pyspark:latest
+# Add CrunchFlow to PATH
+ENV PATH=$PATH:/opt/crunch/crunchtope-dev/source
