@@ -1,4 +1,3 @@
-
 FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -28,12 +27,14 @@ RUN wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.15.5.tar.gz
 
 # Clone and build CrunchFlow
 WORKDIR /opt
-RUN git clone https://github.com/CISteefel/CrunchTope.git \
-    && cd CrunchTope \
+RUN git clone https://bitbucket.org/crunchflow/crunchtope-dev.git \
+    && mkdir -p /opt/crunch \
+    && mv crunchtope-dev/source /opt/crunch/ \
+    && cd /opt/crunch/source \
     && make
 
 # Add CrunchFlow to PATH
-ENV PATH=$PATH:/opt/CrunchTope
+ENV PATH=$PATH:/opt/crunch/source
 
 # Clean up
 RUN apt-get clean && \
