@@ -1,6 +1,8 @@
 # FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
 FROM quay.io/jupyter/base-notebook
 
+USER root
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     gfortran \
