@@ -1,8 +1,8 @@
 # FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
-# Trying to build off a sort minimal jupyter image. This gives us the ability to run notebooks. 
+# Trying to build off a sort minimal jupyter image. This gives us the ability to run notebooks.
 # Is this something the average crunchtope user would want?
 
-# FROM quay.io/jupyter/minimal-notebook 
+# FROM quay.io/jupyter/minimal-notebook
 # this fails on the coiled deployment b/c distribued is missing:
 
 FROM quay.io/jupyter/scipy-notebook
