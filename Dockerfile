@@ -1,6 +1,5 @@
 # FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
-FROM quay.io/jupyter/datascience-notebook
-# FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
+FROM quay.io/jupyter/minimal-notebook
 
 USER root
 
@@ -11,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     git \
     make \
-    python3 \
-    python3-pip \
+    # python3 \
+    # python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
