@@ -1,5 +1,5 @@
 # FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
-FROM quay.io/jupyter/base-notebook
+FROM quay.io/jupyter/datascience-notebook
 
 USER root
 
