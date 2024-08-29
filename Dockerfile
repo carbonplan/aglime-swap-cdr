@@ -1,5 +1,6 @@
 # FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
-FROM quay.io/jupyter/datascience-notebook
+# FROM quay.io/jupyter/datascience-notebook
+FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
 
 USER root
 
@@ -40,8 +41,16 @@ RUN git clone https://bitbucket.org/crunchflow/crunchtope-dev.git \
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Set working directory to a general location
-WORKDIR /home
+# Set up permissions for the default Jupyter user
+RUN mkdir -p /home/jovyan/work && \
+    chown -R 1000:100 /home/jovyan && \
+    chmod -R 775 /home/jovyan
+
+# Set working directory
+WORKDIR /home/jovyan/work
 
 # Ensure the PATH is updated for all users
 ENV PATH=$PATH:/opt/crunch/source
+
+# Switch back to the default Jupyter user
+USER 1000
