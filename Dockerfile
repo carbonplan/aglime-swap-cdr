@@ -1,5 +1,12 @@
 # FROM quay.io/nebari/nebari-jupyterlab:2024.3.2
-FROM quay.io/jupyter/minimal-notebook
+# Trying to build off a sort minimal jupyter image. This gives us the ability to run notebooks. 
+# Is this something the average crunchtope user would want?
+
+# FROM quay.io/jupyter/minimal-notebook 
+# this fails on the coiled deployment b/c distribued is missing:
+
+FROM quay.io/jupyter/scipy-notebook
+
 
 USER root
 
@@ -8,10 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gfortran \
     gcc \
     g++ \
-    git \
+    # git \ # should be covered by base
     make \
-    # python3 \
-    # python3-pip \
+    # python3 \ # should be covered by base
+    # python3-pip \ # should be covered by base
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
