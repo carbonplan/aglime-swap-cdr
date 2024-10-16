@@ -6,13 +6,14 @@
 # T Kukla (CarbonPlan, 2024)
 # 
 # ----------------------------------------------------
+# %% 
 import os
 import re
 import shutil
 import subprocess
 import pandas as pd
 
-
+# %% 
 # --------------------------------------------------------------------------
 # --- RUN SETUP FUNCTIONS: 
 #     these are used to help build the model directory and set 
@@ -175,6 +176,120 @@ def copy_files(src_dir: str,
 
 
 
+def generate_timesteps(total_duration: float, 
+                       timestep: float
+                      ) -> list:
+    '''
+    Create a list of time steps given a total duration for 
+    a scepter run and a timestep. (for use in multi-run only).
+
+    Parameters
+    ----------
+    total_duration : float
+        [years] value denoting the total duration of the 
+        SCEPTER simulation
+    timestep : float
+        
+
+    Returns
+    -------
+    list
+        list of start times for SCEPTER simulations 
+        for ex: [0,2,4,6,...]
+    '''
+    timesteparr = []
+    current_time = 0
+    while current_time <= (total_duration - timestep):
+        timesteparr.append(current_time)
+        current_time += timestep
+    return timesteparr
+
+
+
+def write_iter_file_with_marker(values: list, 
+                                current_index: int, 
+                                filename: str,
+                                ):
+    '''
+    Write a file showing all timesteps and an arrow
+    toward the specific timestep handled by the given
+    scepter run (for use in multi-run only)
+
+    Parameters
+    ----------
+    values : list
+        list of timesteps, generally the output of the 
+        generate_timesteps function
+    current_index : int
+        the run number in the sequence of simulations 
+        (set by the 'counter' in the multi-run loop)
+    filename : str
+        the path to the file that notes which timestep is
+        used. default in the scepter multi-run script is
+        "multiyear-iter.res"
+        
+
+    Returns
+    -------
+    '''
+    with open(filename, 'w') as file:
+        file.write(f"year \n")
+        for i, value in enumerate(values):
+            if i == current_index:
+                file.write(f"{value} <--- \n")
+            else:
+                file.write(f"{value}\n")
+
+
+
+def update_clim(inputfile: str, 
+                outputfile: str, 
+                timezero: float,
+                ):
+    '''
+    SCEPTER climatology always starts at year zero. When you run a multi-year 
+    run you need to modify t=0 depending on the timestep (e.g., for the run 
+    spanning years 2-4, climatology year 2 must become year zero). this function
+    updates the climatology to match the multi-run index and saves the result
+    in the new run's directory. (for use in multi-run only)
+
+    Parameters
+    ----------
+    inputfile : str
+        path to the source climatology file (in the old timestep dir)
+    outputfile : src
+        location where we'll write the output climatology file (the new timestep dir)
+    timezero : float
+        the time value that gets set to zero in this iteration
+        
+
+    Returns
+    -------
+    '''
+    # open the input and output files
+    with open(inputfile, 'r') as f_in, open(outputfile, 'w') as f_out:
+        # skip the header line and copy it to new file
+        header = next(f_in)
+        f_out.write(header)  # write to output
+        # read the file line by line
+        for line in f_in:
+            # split each line into year and climate value
+            year, clim = line.strip().split('\t')  # Adjust the delimiter as needed
+    
+            # convert year to an integer and subtract 5
+            year = float(year) - timezero
+            
+            # check if the adjusted year is greater than or equal to tstep
+            if year >= 0:
+                formatted_yr = "{:.7f}".format(float(year))
+                formatted_clim = "{:.7f}".format(float(clim))
+                # write the adjusted year and temperature to the output file
+                # print(f"{formatted_yr}\t{formatted_clim}\n")
+                f_out.write(f"{formatted_yr}\t{formatted_clim}\n")  # Adjust the delimiter as needed
+
+
+
+
 def remove_duplicates(input_file: str):
     '''
     Read the input file, identify and delete duplicate lines.
@@ -195,7 +310,9 @@ def remove_duplicates(input_file: str):
         lines = f.readlines()
         header = lines[0]  # Save the header
         lines_without_tabs = [line.replace('\t', '') for line in lines]  # remove tabs before comparing
-        unique_lines = set(lines_without_tabs[1:])  # remove duplicates from mineral names
+        # add '\n' if a line doesn't have it (just for comparison sake)
+        lines_without_tabs2 = [element if element.endswith('\n') else element + '\n' for element in lines_without_tabs]
+        unique_lines = set(lines_without_tabs2[1:])  # remove duplicates from mineral names
 
     # check if the last entry ends with "\n" and remove it if needed
     last_entry = list(unique_lines)[-1]
