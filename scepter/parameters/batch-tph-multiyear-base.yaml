@@ -2,5 +2,5 @@ control-script: singlerun_targetph_multiyear.sh
 control-script-dir: /home/tykukla/aglime-swap-cdr/scepter/control-scripts/
 batch-input: test_tph_multiyear.csv
 batch-input-dir: /home/tykukla/aglime-swap-cdr/scepter/batch-inputs/
-default-dict: default_dictionary  # see SCEPTER/defaults/dict_singlerun.py
+default-dict: reApp_dictionary  # see SCEPTER/defaults/dict_singlerun.py
 model-dir: /home/tykukla/SCEPTER/

@@ -1,2 +1,3 @@
-duration, tph, max_time, cec, dustsp, dustrate, dustrad, spinrun, newrun_id, climatedir, climatefiles, add_secondary
-1, 7.7, 3, 21.1, gbas, 6405, 150, scratch, BB_MultiYearTest, '/home/tykukla/aglime-swap-cdr/scepter/clim-inputs/', 'default', False
+duration,tph,max_time,cec,dustsp,dustsp_2nd,dustrate,dustrate_2nd,dustrad,spinrun,newrun_id,climatedir,climatefiles,add_secondary
+1,6.6,12,21.1,cc,amnt,200,20,150,site_311a_pr7_spintuneup4,multiyearTest2_fert,NA,site_311a,True
+1,7.1,12,21.1,cc,amnt,200,20,150,site_311a_pr7_spintuneup4,multiyearTest2_fert,NA,site_311a,True
