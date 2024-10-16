@@ -6,15 +6,15 @@
 # T Kukla (CarbonPlan, 2024)
 #
 # ----------------------------------------------------
-# %% 
+# %%
 import os
 import re
 import shutil
 import subprocess
 import pandas as pd
+ 
 
-# %% 
-
+# %%
 # --------------------------------------------------------------------------
 # --- RUN SETUP FUNCTIONS:
 #     these are used to help build the model directory and set
