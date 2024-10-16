@@ -1,7 +1,7 @@
 #! /usr/bin/bash
 
 # name of run script
-runscript="$1/rock_buff_tunespin_bisec_v2_multiYear.py"
+runscript="$1/rock_buff_minPH_multiyear.py"
 # model directory
 modeldir="$1"
 # output directory
