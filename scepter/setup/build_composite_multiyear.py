@@ -66,8 +66,13 @@ def build_composite(basename, outdir):
     # ... first get all the outdir paths
     # (these will be passed to the function in the main script!)
     # outdir = "/home/tykukla/SCEPTER/scepter_output"
+    # -- we're having an issue where a basename like 
+    #    mydir_10 returns "mydir_10_startyear*" but it also 
+    #    returns "mydir_100_startyear*". So we add an under-
+    #    score to prevent this but only for finding alldirs
+    runname_base_underscore = basename + "_"
     runname_base = basename
-    alldirs = sorted(find_subdirs_1level(outdir, runname_base))
+    alldirs = sorted(find_subdirs_1level(outdir, runname_base_underscore))
 
     # remove paths with the word "composite"
     alldirs = [path for path in alldirs if "composite" not in os.path.basename(path)]
@@ -199,16 +204,23 @@ def build_composite(basename, outdir):
             # check if file exists
             savedst_tmp = os.path.join(dst_main_flx, fn)
             filecheck = os.path.isfile(savedst_tmp)
-            if filecheck:  # then exclude the header, append the rest
-                dfsrc.to_csv(
-                    savedst_tmp, header=None, index=None, sep="\t", mode="a"
-                )  # mode = "a" will append to end of file if exists
+            if filecheck:  # then read in the existing df and append the new one 
+                # read the existing file into a dataframe
+                existing_df = preprocess_txt(savedst_tmp)
+                # join the existing and source dfs together by column
+                # (join='outer' means a column that only exists in df2 will be kept, with nans in df1)
+                #  and axis=0 means it's concatenated row-wise, not column-wise)
+                new_df = pd.concat([existing_df, dfsrc], axis=0, join='outer')
+                new_df.to_csv(  # default is mode='w' which will overwrite the existing file (that's fine because we've merged it with the new data)
+                    savedst_tmp, index=None, sep="\t"
+                )  
             else:  # if the file doesn't exist, save and include the header
                 dfsrc.to_csv(
                     savedst_tmp, index=None, sep="\t", mode="a"
                 )  # mode = "a" will append to end of file if exists
         # ----------------------------------------------------------
-
+    # return the new output dirs
+    return dst_main_field, dst_main_lab
 
 # # save result or append if one exists
 #     if filecheck:
