@@ -1,0 +1,71 @@
+# --- What's in each directory?
+
+
+# meanAnn_shortrun_*__001
+- cc vs gbas
+- counterfactual cc
+- same, low upstream emissions for each
+
+
+# meanAnn_shortrun_*__002
+- cc vs gbas
+- counterfactual cc
+- gbas LCA emissions > cc LCA emissions
+
+
+# meanAnn_shortrun_*__003
+- cc vs gbas
+- counterfactual cc
+- gbas LCA emissions < cc LCA emissions
+
+
+# meanAnn_shortrun_*__004
+- cc vs gbas
+- counterfactual cc (so low that it's emitting in hiFert case)
+- same, low upstream emissions for each
+
+
+# meanAnn_shortrun_*__005
+- cc vs gbas
+- counterfactual cc
+- gbas LCA emissions << cc LCA emissions
+
+
+# meanAnn_shortrun_*__006
+- cc vs gbas
+- counterfactual cc (so low that it's emitting in hiFert case)
+- gbas LCA emissions << cc LCA emissions
+
+
+# meanAnn_shortrun_*__007
+- cc vs gbas
+- counterfactual cc (so low that it's emitting in hiFert case)
+- gbas LCA emissions > cc LCA emissions
+
+
+# meanAnn_shortrun_*__008  FAILED -- same as 006
+
+
+# meanAnn_shortrun_*__009 ( now with simple subtract, no neg ! )
+- cc vs gbas
+- counterfactual cc (so low that it's emitting in hiFert case)
+- gbas LCA emissions << cc LCA emissions
+
+
+# meanAnn_shortrun_*__010 ( same as 001 but with simple subtract, no neg ! )
+- cc vs gbas
+- counterfactual cc
+- same, low upstream emissions for each
+
+
+# meanAnn_shortrun_*__011 ( now with simple subtract, no neg ! )
+- cc vs gbas
+- counterfactual cc (higher app so net R in hi and lowFert ~1.5 ton/ha/yr)
+- same, low upstream emissions for each
+
+
+# meanAnn_shortrun_*__012 ( now with simple subtract, no neg ! )
+- cc vs gbas
+- counterfactual cc (~0.4 ton/ha/yr)
+- same, low upstream emissions for each
+

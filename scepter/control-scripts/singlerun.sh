@@ -38,6 +38,9 @@ IFS=$' , ' read -r -a columns <<< "$header_row"
 # assign values to variables using column names
 IFS=$' , ' read -r -a values <<< "$row_data"
 declare -A params
+
+# echo "$header_row"
+
 for ((i=0; i<${#columns[@]}; i++)); do
     column_name="${columns[i]}"
     value="${values[i]}"
@@ -48,10 +51,11 @@ done
 # build the Python command
 python_cmd="python3 $runscript --modeldir $modeldir --outdir $outdir --default_dict $default_dict"
 for key in "${!params[@]}"; do
+    echo " --$key ${params[$key]}"
     python_cmd+=" --$key ${params[$key]}"
 done
 
-# Run the Python script
+# # Run the Python script
 echo "running python script with command:"
 echo "$python_cmd" # troubleshoot
 eval "$python_cmd"

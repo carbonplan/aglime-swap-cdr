@@ -8,19 +8,24 @@
 # compared to a control scenario. Only absolute 
 # fluxes for the single run are considered.
 # 
+# These functions are called within the SCEPTER
+# run .py scripts, creating a `postproc_*` dir 
+# in the run output directory.
+# 
 # ------------------------------------------------
 # %%
-from scipy.integrate import cumulative_trapezoid
-import numpy as np
-import pandas as pd
-# import xarray as xr
-import pickle
 import math
 import os
 import re
 import glob
 import fnmatch
+# from typing import Union, Literal
 
+from scipy.integrate import cumulative_trapezoid
+import numpy as np
+import pandas as pd
+import xarray as xr
+import pickle
 
 # %% 
 # --- Dict for molar masses of solid species (from Kanzaki et al., 2022; table 1)
@@ -71,6 +76,8 @@ molar_mass_dict = {
     # basalt_defines.h. 
     # 
     # --- molar mass is calculated following line ~358 in scepter.f90: 
+    # (note the terms divided by 2 account for the fact that the cation oxide
+    #  has 2 moles of the cation, not one)
     # mwtgbas = (fr_si_gbas*mwtamsi + fr_al_gbas/2*mwtal2o3 + fr_na_gbas/2*mwtna2o
     #            + fr_k_gbas/2*mwtk2o + fr_ca_gbas*mwtcao + fr_mg_gbas*mwtmgo
     #            + fr_fe2_gbas*mwtfe2o)
@@ -96,7 +103,7 @@ def preprocess_txt(
     fn: str,
     run_subdir: str = "flx",
     map_numeric: bool = True
-    ) -> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Convert SCEPTER output .txt files to pandas DataFrame for further
     analysis
@@ -158,7 +165,7 @@ def get_data(
     cdvar: str,
     run_subdir: str = "flx",
     get_int: bool = True
-    ) -> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Get the SCEPTER data from defined text files. both timeseries
     and integrated flux files (e.g., <var_fn>-<cdvar> and int_<var_fn>-<cdvar>)
@@ -200,6 +207,49 @@ def get_data(
     else:
         return df, _
 
+def get_data_prof(
+    outdir: str,
+    runname: str,
+    var_prefix: str,
+    time_index: int,
+    run_subdir: str = "prof",
+) -> pd.DataFrame:
+    '''
+    Return data from a SCEPTER/scepter_output/prof/*.txt file 
+    in pandas dataframe format.
+
+    Parameters
+    ----------
+    outdir : str
+        path to the SCEPTER output directory. Usually something like 'my/path/SCEPTER/scepter_output'
+    runname : str
+        name of the SCEPTER run (equivalent to the directory within outdir). Generally <NAME>_field.
+    var_prefix : str
+        prefix of the file to read in the 'prof' subdirectory. Includes all characters up to `*-xxx.txt`
+        where xxx is a 3 digit numeric from 001 to 020. 
+    time_index : int 
+        [1:20] single integer between 1 and 20 denoting a timestep that was output as a profile. There is
+        one profile file per timestep.
+    run_subdir : str
+        name of the subdirectory that holds the profile files ("prof" by default)
+    
+    Returns 
+    -------
+    pd.DataFrame
+        profile values defined over depth and time.
+    '''
+    # generate file path
+    fn = f"{var_prefix}-{time_index:03d}.txt"    # create filename
+    infile = os.path.join(outdir, runname, run_subdir, fn)   # paste filename to path
+    # read in data
+    returnme = preprocess_txt(outdir, runname, fn, run_subdir = run_subdir)
+    # rename z to depth
+    returnme = returnme.rename(columns={"z": "depth"})
+
+    # return result
+    return returnme
+
+
 # %%
 # ******************************************************************************
 # ----------------------- CDR METRIC FUNCTIONS ---------------------------------
@@ -212,7 +262,7 @@ def co2_flx(
     inorganic_sp_list: list = ["arg", "cc", "dlm"],
     convert_units: bool = True,
     co2_g_mol: float=44.01, # molar_mass_dict not used bc the input file should be in mol co2 / m2 / yr
-    ) -> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Get the CO2 diffusive and advective flux over time. Uses the *flx_gas* 
     files and pco2 variable by default. files are in mol/m2/yr and output 
@@ -247,12 +297,12 @@ def co2_flx(
         base name of the SCEPTER flx file. Format is "[basename]-[cdvar].txt"
     cdvar : str
         name of the variable used for CDR metric. Should align with var_fn such that format is "[basename]-[cdvar].txt"
-    organic_list : dict
+    organic_sp_list : dict
         dict where keys are the IDs for all possible organic species (required for 
         resp calculation) and values are molar masses in g/mol 
         (required to go from mol/m2/yr to mass/m2/yr) (for keys and values, see Kanzaki 
         et al., 2022; table 1)
-    c_mineral_list : dict
+    inorganic_sp_list : dict
         dict where keys are the IDs for all carbon-bearing minerals 
         and values are their molar masses in g/mol (required to go 
         from mol/m2/yr to mass/m2/yr) (for keys and values, see Kanzaki 
@@ -352,7 +402,7 @@ def sld_flx(
     var_fn: str = "flx_sld",
     dust_from_file: bool = True,
     molar_mass_dict: dict = molar_mass_dict
-    ) -> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Get the feedstock fluxes. Uses the *flx_sld* files for the feedstock. Only
     time-integrated fluxes are returned. integrated dust application can be 
@@ -477,7 +527,7 @@ def carbAlk_adv(
     convert_units: bool = True,
     co2potential_g_mol_sil: float=88.02, # potential grams of CO2 per mole of alkalinity assuming 2:1 DIC_CO2:ALK
     co2potential_g_mol_cc: float=44.01, # potential grams of CO2 per mole of alkalinity assuming 1:1 DIC_CO2:ALK
-    ) -> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Get the advective and storage fluxes of carbonate alkalinity over time. 
     Uses the *flx_co2sp* files and ALK variable by default. files are in 
@@ -586,7 +636,7 @@ def sumCat_adv(
     var_fn: str = "flx_aq",
     catvars_charge: dict = {"ca": 2, "mg": 2, "k": 1, "na": 1},
     convert_units: bool = True
-    ) -> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Get the advective and storage fluxes of the sum of cations over time. 
     Uses the *flx_aq* files and cation variable by default. files are in 
@@ -708,7 +758,7 @@ def find_cations(
     runname: str,
     var_fn: str = "flx_aq",
     catvars_charge: dict = {"ca": 2, "mg": 2, "k": 1, "na": 1}
-    ) -> list:
+) -> list:
     """
     Get a list of cation files present in the flux output.
 
@@ -751,7 +801,7 @@ def build_cation_df(
     negligible_val: float = 1e-7,
     co2potential_g_mol: float=44.01,
     convert_units: bool=True
-    )-> pd.DataFrame:
+)-> pd.DataFrame:
     """
     read in the two cation dataframes, clean them up, return them
 
@@ -876,7 +926,7 @@ def cflx_calc(
     convert_units: bool = True,
     save_dir: str = 'postproc_flxs',
     calc_list: list = ['co2_flx', 'carbAlk_adv', 'sumCat_adv', 'sld_flx']
-    ):
+):
     """
     compute various cdr-relevant c flux metrics in the postprocessing
     of a SCEPTER run. Save the results
@@ -943,7 +993,7 @@ def cflx_calc(
                                           catvars_charge = {"ca": 2, "mg": 2, "k": 1, "na": 1},
                                           convert_units = True)
         # save the main file
-        savename_main = "carbAlk_flxs.pkl"
+        savename_main = "cationflx_sum.pkl"
         sumCatdf.to_pickle(os.path.join(savehere, savename_main))
         
         # save the output dictionary
@@ -968,6 +1018,390 @@ def cflx_calc(
             rockdf.to_pickle(os.path.join(savehere, savename))
 
 
+
+
+
+# %% 
+# ******************************************************************************
+# ----------------------- PROFILE METRIC FUNCTIONS ---------------------------------
+
+# dictionary of postprocess function inputs
+postproc_prof_dict = {
+
+    "adsorbed": {
+        "var_prefix": "prof_aq(ads)",
+        "var_units": "mol/L",
+    },
+    
+    # --- requires special function (due to base saturation calc)
+    "adsorbed_percCEC": {
+        "var_prefix": "prof_aq(ads%cec)",
+        "var_units": "%cec",
+    },
+    # ----------------------------------------------------------
+
+    "adsorbed_ppm": {
+        "var_prefix": "prof_aq(adsppm)",
+        "var_units": "ppm",
+    },
+
+    "aqueous": {
+        "var_prefix": "prof_aq",
+        "var_units": "mol/L",
+    },
+
+    "aqueous_total": {
+        "var_prefix": "prof_aq(tot)",
+        "var_units": "mol/L",
+    },
+
+    # --- requires special fxn (due to variable units)
+    "bulksoil": {
+        "var_prefix": "bsd"
+    },
+    # -------------------------------------------------
+
+    "exchange_total": {
+        "var_prefix": "prof_ex(tot)",
+        "var_units": "mol/L",
+    },
+    
+    "gas": {
+        "var_prefix": "prof_gas",
+        "var_units": "atm",
+        "calculate_mean": False,
+    },
+    
+    "rate": {
+        "var_prefix": "rate",
+        "var_units": "mol/m2/yr",
+    },
+
+    # --- requires special treatment because it's from the lab run
+    "soil_ph": {
+        "var_prefix": "prof_aq",
+        "var_units": "mol/L",
+    },
+    # -------------------------------------------------------------
+
+    "solid": {
+        "var_prefix": "prof_sld",
+        "var_units": "mol/m3",
+    },
+
+    "solid_sp_saturation": {
+        "var_prefix": "sat_sld",
+        "var_units": "X",
+    }, 
+
+    "solid_volumePercent": {
+        "var_prefix": "prof_sld(v%)",
+        "var_units": "%vol",
+    },
+
+    "solid_weightPercent": {
+        "var_prefix": "prof_sld(wt%)",
+        "var_units": "wt%",
+    },
+
+    "specific_surface_area": {
+        "var_prefix": "ssa",
+        "var_units": "m2/g(?)",
+    },
+
+    "surface_area": {
+        "var_prefix": "sa",
+        "var_units": "X",
+    },
+}
+
+def profile_to_ds_optMean(
+    outdir: str,
+    runname: str,
+    var_prefix: str,
+    var_units: str,
+    time_indices: np.array=np.arange(1,21,1),
+    calculate_mean: bool=True,
+    depth_mean_suffix: str="coredep",
+    run_subdir: str="prof",
+) -> xr.Dataset:
+    '''
+    Collects the profile data from a given var_prefix for the defined
+    time_indices. Converts from pandas dataframes into xr datasets 
+    defined over depth and time. If calculate_mean is true, then 
+    the mean of each variable is calculated from depth 0 to depth i. 
+
+    Note, the averaging calculation only works for equally spaced depth 
+    grids (which SCEPTER is by default)
+
+    Parameters
+    ----------
+    outdir : str
+        path to the SCEPTER output directory. Usually something like 'my/path/SCEPTER/scepter_output'
+    runname : str
+        name of the SCEPTER run (equivalent to the directory within outdir). Generally <NAME>_field.
+    var_prefix : str
+        prefix of the file to read in the 'prof' subdirectory. Includes all characters up to `*-xxx.txt`
+        where xxx is a 3 digit numeric from 001 to 020. 
+    var_units : str
+        units for the variables you're reading in (solid profiles, for example, are often mol/m3)
+    time_indices : np.array
+        SCEPTER outputs 20 time indices as profiles. This array selects which to include in the 
+        output dataset. Default is all 20.
+    calculate_mean : bool
+        [True | False] true means the mean of all variables is calculated at each depth (as 
+        though someone took a sample to that depth and calculated the mean)
+    depth_mean_suffix : str
+        Only used if calculate_mean == True. This is the variable name suffix to append if 
+        we calculate the depth mean
+    run_subdir : str
+        name of the subdirectory that holds the profile files ("prof" by default)
+    '''
+    # loop through time indices to extract data
+    for ts in time_indices:
+        if ts == time_indices[0]:
+            outdf = get_data_prof(outdir, runname, var_prefix, ts, run_subdir)
+        else:
+            tmpdf = get_data_prof(outdir, runname, var_prefix, ts, run_subdir)
+            outdf = pd.concat([outdf, tmpdf])
+
+    # convert to an xarray dataset
+    ds = outdf.set_index(['depth', 'time']).to_xarray()
+    
+    if calculate_mean:
+        # get the mean wt% from depth 0 to depth i for every depth
+        # calculate the cumulative sum and count over the 'depth' dimension
+        cumsum_ds = ds.cumsum(dim='depth')
+        cumcount_ds = xr.ones_like(ds).cumsum(dim='depth') # get the cumulative count (cumsum / cumcount = mean; since depth is equally spaced)
+
+        # calculate the average by dividing the cumulative sum by the cumulative count
+        average_ds = cumsum_ds / cumcount_ds
+        average_ds_renamed = average_ds.rename({var: f"{var}_{depth_mean_suffix}" for var in average_ds.data_vars})
+
+        # add new variables to the original dataset
+        ds = xr.merge([ds, average_ds_renamed])
+
+    # add units
+    for var in ds.data_vars:
+        ds[var].attrs["units"] = var_units  # set the same units for all variables
+    
+    # add output file type
+    ds.attrs["outfile"] = var_prefix
+
+    # return result
+    return ds
+
+
+def get_bsd_prof_units(
+    var_name
+)-> str:
+    '''
+    Read in a variable name and extract the units from it. 
+    Return just the units as a string. Units are denoted by
+    [brackets]. If no brackets, return 'NA'
+
+    Parameters
+    ----------
+    var_name : str
+        name of the data_var
+    
+    Returns
+    -------
+    str
+        the value within the brackets of var_name (or "NA" if no brackets)
+    '''
+    # check if the variable name contains units in brackets (e.g., var1[m/yr])
+    match = re.search(r'\[(.*?)\]', var_name)
+    if match:
+        # If units are found, return them
+        return match.group(1)
+    else:
+        # If no units are found, return 'NA'
+        return 'NA'
+
+
+def bsd_profile_to_ds(
+    outdir: str,
+    runname: str,
+    var_prefix: str,
+    time_indices: np.array=np.arange(1,21,1),
+    run_subdir: str="prof",
+) -> xr.Dataset:
+    '''
+    Collects the bsd profile data and turns it into an xarray defined
+    over time and depth. Units that are in the brackets of column names
+    are also defined at each attribute using the get_bsd_prof_units function
+
+    Parameters
+    ----------
+    outdir : str
+        path to the SCEPTER output directory. Usually something like 'my/path/SCEPTER/scepter_output'
+    runname : str
+        name of the SCEPTER run (equivalent to the directory within outdir). Generally <NAME>_field.
+    var_prefix : str
+        prefix of the file to read in the 'prof' subdirectory. Includes all characters up to `*-xxx.txt`
+        where xxx is a 3 digit numeric from 001 to 020. 
+    time_indices : np.array
+        SCEPTER outputs 20 time indices as profiles. This array selects which to include in the 
+        output dataset. Default is all 20.
+    run_subdir : str
+        name of the subdirectory that holds the profile files ("prof" by default)
+ 
+    Returns
+    -------
+    xr.Dataset
+        all bsd variables defined over time and depth. 
+    '''
+
+    # loop through time indices to extract data
+    for ts in time_indices:
+        if ts == time_indices[0]:
+            outdf = get_data_prof(outdir, runname, var_prefix, ts, run_subdir)
+        else:
+            tmpdf = get_data_prof(outdir, runname, var_prefix, ts, run_subdir)
+            outdf = pd.concat([outdf, tmpdf])
+
+    # convert to an xarray dataset
+    ds = outdf.set_index(['depth', 'time']).to_xarray()
+
+    # create dictionary with units for each variable
+    units_dict = {var: get_bsd_prof_units(var) for var in ds.data_vars}
+
+    # add the units as an attribute to each variable in the dataset
+    for var in ds.data_vars:
+        ds[var].attrs['units'] = units_dict[var]
+    
+    # return result
+    return ds
+
+
+def ads_percCec_prof_baseSat(
+    outdir: str,
+    runname: str,
+    var_prefix: str,
+    var_units: str,
+    time_indices: np.array=np.arange(1,21,1),
+    calculate_mean: bool=True,
+    depth_mean_suffix: str="depmean",
+    run_subdir: str="prof",
+) -> xr.Dataset:
+    '''
+    Get adsorbed species as a percent of CEC in an xarray dataset. This is just a wrapper 
+    around the profile_to_ds_optMean function which computes base saturation after getting 
+    the ads%cec profile as a dataset.
+    
+    Parameters
+    ----------
+    outdir : str
+        path to the SCEPTER output directory. Usually something like 'my/path/SCEPTER/scepter_output'
+    runname : str
+        name of the SCEPTER run (equivalent to the directory within outdir). Generally <NAME>_field.
+    var_prefix : str
+        prefix of the file to read in the 'prof' subdirectory. Includes all characters up to `*-xxx.txt`
+        where xxx is a 3 digit numeric from 001 to 020. 
+    var_units : str
+        name of the units for the variables to add as an attribute to the dataset
+    time_indices : np.array
+        SCEPTER outputs 20 time indices as profiles. This array selects which to include in the 
+        output dataset. Default is all 20.
+    calculate_mean : bool
+        [True | False] true means the mean of all variables is calculated at each depth (as 
+        though someone took a sample to that depth and calculated the mean)
+    depth_mean_suffix : str
+        Only used if calculate_mean == True. This is the variable name suffix to append if 
+        we calculate the depth mean
+    run_subdir : str
+        name of the subdirectory that holds the profile files ("prof" by default)
+ 
+    Returns
+    -------
+    xr.Dataset
+        all bsd variables defined over time and depth. 
+    '''
+    # get the profile as a dataset
+    ds = profile_to_ds_optMean(outdir, runname, var_prefix, var_units, time_indices, calculate_mean, depth_mean_suffix, run_subdir)
+
+    # compute base saturation
+    bs_sp_list = ['ca','mg','k','na']     # bases that we want to sum
+    valid_vars = [var for var in bs_sp_list if var in ds]
+
+    if valid_vars:
+        ds["base_saturation"] = ds[valid_vars].to_array(dim="vars").sum(dim="vars")
+        ds["base_saturation"].attrs["units"] = var_units  # add units
+    else:
+        ds['base_saturation'] = np.nan
+        ds["base_saturation"].attrs["units"] = var_units  # add units
+    
+    # return result
+    return ds
+
+
+def prof_postproc_save(
+    outdir: str, 
+    runname_field: str, 
+    runname_lab: str,
+    postproc_prof_list: list=["all"],
+    save_dir: str="postproc_profs",
+):
+    '''
+    Convert SCEPTER/scepter_output/myrun/prof/* files to .nc files. Relies on other profile
+    postproc embedded functions. Only the profile files listed in postproc_prof_list will 
+    be processed. 
+
+    Parameters
+    ----------
+    outdir : str
+        path to the SCEPTER output directory. Usually something like 'my/path/SCEPTER/scepter_output'
+    runname_field : str
+        name of the SCEPTER run (equivalent to the directory within outdir). Generally <NAME>_field.
+    runname_lab : str
+        name of the SCEPTER run (equivalent to the directory within outdir). Generally <NAME>_lab.
+    postproc_prof_list : list 
+        list of postprocess files that are also keywords in postproc_prof_dict (see `cflx_proc.py`)
+    save_dir : str
+        name of the subdirectory where the .nc files are saved
+
+    Returns
+    -------
+
+    '''
+    # where to save the results
+    savehere = os.path.join(outdir, runname_field, save_dir)
+    # make dir if it doesn't exist
+    if not os.path.exists(savehere):
+        os.makedirs(savehere)
+
+    # create the list if user asks for all postproc files
+    if (postproc_prof_list == "all") or (postproc_prof_list == ["all"]):
+        postproc_prof_list = list(postproc_prof_dict.keys())
+
+    # check that all listed prof names are in the dictionary
+    missing_keys = [key for key in postproc_prof_list if key not in postproc_prof_dict]
+    if missing_keys:
+        print(f"Warning: The following postprocess profile names are not compatible: {missing_keys}; check for typos!")
+        # remove the missing ones
+        pplist_new = [key for key in postproc_prof_list if key in postproc_prof_dict]
+        postproc_prof_list = pplist_new
+
+    # --- loop through postproc list, save result
+    for pp in postproc_prof_list:
+        
+        # --- check for special cases first
+        if pp == "bulksoil":
+            ds = bsd_profile_to_ds(outdir, runname_field, **postproc_prof_dict[pp])
+        elif pp == "adsorbed_percCEC":
+            ds = ads_percCec_prof_baseSat(outdir, runname_field, **postproc_prof_dict[pp])
+        elif pp == "soil_ph":
+            ds = profile_to_ds_optMean(outdir, runname_field, **postproc_prof_dict[pp])
+            ds = ds.sel(time = np.max(ds.time.values)) # keep only the max time (lab run time is not aligned with field!)
+        # ---------------------------------
+        else:
+            ds = profile_to_ds_optMean(outdir, runname_field, **postproc_prof_dict[pp])
+        
+        # --- save 
+        savename = f"{pp}.nc"
+        ds.to_netcdf(os.path.join(savehere, savename))
+        
 
 
 

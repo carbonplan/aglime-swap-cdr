@@ -57,7 +57,7 @@ for subdir in "$src"/*; do
         if [ $TIME_DIFF_DAYS -lt $toonew ] || [ "$should_exclude" = true ]; then
             # update exclusion list
             # exc_list+="$subdir "
-            exc_list+=" --exclude $subdir"
+            exc_list+=" --exclude $subdir*"
 
             # echo "excluding $subdir"
             # echo "$TIME_DIFF_DAYS -le $toonew"

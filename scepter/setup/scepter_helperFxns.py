@@ -839,6 +839,17 @@ def to_aws(
             result1 = subprocess.run(cmd_activate, shell=True, check=True)
             result2 = subprocess.run(cmd_run, shell=True, check=True)
             outdir_final = dst_aws
+            # ... remove empty sub directories
+            for dirpath, dirnames, filenames in os.walk(src, topdown=False):
+                for dirname in dirnames:
+                    dir_to_check = os.path.join(dirpath, dirname)
+                    if not os.listdir(dir_to_check):  # check if the directory is empty
+                        os.rmdir(dir_to_check)
+                        print(f"Removed empty directory: {dir_to_check}")
+            # ... remove the src directory if it's empty
+            if not os.listdir(src):  # Check if src is empty
+                os.rmdir(src)
+
         elif aws_save == "copy":
             cmd_run = "s5cmd cp " + src + " " + dst_aws
             result1 = subprocess.run(cmd_activate, shell=True, check=True)
