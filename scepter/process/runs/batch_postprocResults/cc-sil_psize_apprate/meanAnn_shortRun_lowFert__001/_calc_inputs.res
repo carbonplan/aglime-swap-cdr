@@ -17,4 +17,3 @@ Emissions:
   barge_km: 100.0
   barge_diesel_km: 0
   Efactor_org: MRO
-
