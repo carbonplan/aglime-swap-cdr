@@ -68,4 +68,3 @@
 - cc vs gbas
 - counterfactual cc (~0.4 ton/ha/yr)
 - same, low upstream emissions for each
-

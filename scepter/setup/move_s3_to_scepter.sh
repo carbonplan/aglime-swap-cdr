@@ -27,7 +27,7 @@ s5cmd ls "$SOURCE_BUCKET" | grep "spintuneup" | while read -r line; do
 
     # Extract the directory path from the listing
     DIR_PATH=$(echo "$line" | awk '{print $NF}')
-    
+
     # Move each matching directory to the destination
     echo "Syncing ${SOURCE_BUCKET}${DIR_PATH}* to ${DESTINATION_PATH}${DIR_PATH}"
     s5cmd sync "${SOURCE_BUCKET}${DIR_PATH}*" "${DESTINATION_PATH}${DIR_PATH}"
@@ -56,5 +56,3 @@ done
 
 # --- delete dirs that are now empty
 # find $src -mindepth 1 -type d -empty -not -path "$MAIN_DIR" -delete
-
-

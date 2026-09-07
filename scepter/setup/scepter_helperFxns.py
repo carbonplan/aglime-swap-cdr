@@ -11,9 +11,9 @@ import os
 import re
 import shutil
 import subprocess
-from scipy.integrate import cumulative_trapezoid
 
 import pandas as pd
+from scipy.integrate import cumulative_trapezoid
 
 # %%
 # --------------------------------------------------------------------------
@@ -710,31 +710,32 @@ def run_complete_check(
             pass  # pass does nothing, creating an empty file
 
 
-# modify the flx/dust.txt file to get total dust flux over time 
+# modify the flx/dust.txt file to get total dust flux over time
 def dustflx_calc(
     outdir: str,
-    runname_field: str, 
+    runname_field: str,
     fdust1: float,
     fdust2: float,
     dustsp: str,
-    dustsp_2nd: str=None):
+    dustsp_2nd: str = None,
+):
     """
     SCEPTER's default dust file (*/flx/dust.txt) shows time and the relative amount
     of dust that gets applied. We use the dust flux to compute the timeseries
     of dust application and the integrated dust application. Nothing gets returned,
-    but the updated dust.txt file gets saved. 
+    but the updated dust.txt file gets saved.
 
     Parameters
     ----------
     outdir : str
         output directory for SCEPTER results (ex: "home/name/SCEPTER/scepter_output")
     runname_field : str
-        name of the directory for the SCEPTER field run (for now, we're not applying 
+        name of the directory for the SCEPTER field run (for now, we're not applying
         any changes to the lab dust fluxes)
     fdust1 : float
-        [g m2 yr] amount of primary dust applied each year 
+        [g m2 yr] amount of primary dust applied each year
     fdust2 : float
-        [g m2 yr] amount of secondary dust applied each year 
+        [g m2 yr] amount of secondary dust applied each year
     dustsp : str
         name of the primary dust species (e.g., "cc" or "gbas")
     dustsp_2nd : str
@@ -744,7 +745,7 @@ def dustflx_calc(
     -------
     """
     # read in the dust flux dataframe
-    file_path = os.path.join(outdir, runname_field, 'flx', 'dust.txt')
+    file_path = os.path.join(outdir, runname_field, "flx", "dust.txt")
     df = preprocess_txt(file_path)
 
     # make sure dust fluxes are numbers
@@ -758,27 +759,31 @@ def dustflx_calc(
             fdust2 = float(fdust2)
         except:
             fdust2 = 0
-    
-    # add a column for the dust flux
-    df['dust1_STATIC'] = fdust1
-    df['dust2_STATIC'] = fdust2
 
-    # compute dust timeseries 
-    df['dust1_g_m2_yr'] = df['dust(relative_to_average)'] * df['dust1_STATIC']
-    df['dust2_g_m2_yr'] = df['dust(relative_to_average)'] * df['dust2_STATIC']
+    # add a column for the dust flux
+    df["dust1_STATIC"] = fdust1
+    df["dust2_STATIC"] = fdust2
+
+    # compute dust timeseries
+    df["dust1_g_m2_yr"] = df["dust(relative_to_average)"] * df["dust1_STATIC"]
+    df["dust2_g_m2_yr"] = df["dust(relative_to_average)"] * df["dust2_STATIC"]
 
     # compute integrated dust timeseries
-    df['int_dust1_g_m2_yr'] = cumulative_trapezoid(df['dust1_g_m2_yr'], df['time'], initial=0)
-    df['int_dust2_g_m2_yr'] = cumulative_trapezoid(df['dust2_g_m2_yr'], df['time'], initial=0)
+    df["int_dust1_g_m2_yr"] = cumulative_trapezoid(
+        df["dust1_g_m2_yr"], df["time"], initial=0
+    )
+    df["int_dust2_g_m2_yr"] = cumulative_trapezoid(
+        df["dust2_g_m2_yr"], df["time"], initial=0
+    )
 
     # add dust species info
-    df['dustsp1'] = dustsp
-    df['dustsp2'] = dustsp_2nd
-    
+    df["dustsp1"] = dustsp
+    df["dustsp2"] = dustsp_2nd
+
     # save the result
     df.to_csv(  # default is mode='w' which will overwrite the existing file (that's fine because we've merged it with the new data)
         file_path, index=None, sep="\t"
-        )  
+    )
 
 
 # --------------------------------------------------------------------------
@@ -857,7 +862,7 @@ def to_aws(
             outdir_final = dst_aws
         else:
             outdir_final = outdir
-    
+
     # return the new directory for postproc purposes
     return outdir_final
 
