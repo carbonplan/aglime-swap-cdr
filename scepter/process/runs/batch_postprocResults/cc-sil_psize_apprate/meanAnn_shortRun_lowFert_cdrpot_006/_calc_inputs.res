@@ -24,4 +24,3 @@ Emissions (calcite):
   barge_km: 250.0
   barge_diesel_km: 0
   Efactor_org: MRO
-
